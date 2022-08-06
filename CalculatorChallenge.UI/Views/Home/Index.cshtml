@@ -1,0 +1,40 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <input type="number"id="number1" />
+    <select id="function" asp-items="Html.GetEnumSelectList<Functions>()">
+    </select>
+    <input type="number" id="number2" /> 
+    =
+    <input type="number" id="result" />
+    <button type="button" onclick="Calculate()">Count</button>
+</div>
+
+@section Scripts{
+<script>
+function Calculate(){
+    var model = {
+        Numbers:[parseFloat($("#number1").val()),parseFloat($("#number2").val()) ],
+        Functions:[parseInt($("#function").val())]
+    }
+
+    $.ajax({
+        url:"Home/Calculate",
+        data: JSON.stringify(model),
+        type: "POST",
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        success:(res)=> {
+            if(res.status==true){
+                $("#result").val(res.data);
+            }
+            else{
+            alert("Error! - "+ res.message);
+            }
+        }
+    })
+}
+</script>
+}
